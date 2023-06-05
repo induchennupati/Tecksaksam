@@ -1,0 +1,124 @@
+<!doctype html>
+<head>
+	<title>Placement Cell</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+	<style>
+		html,body{
+			height:100%;
+		}
+		*{
+			box-sizing:border-box;
+			margin:0;
+			padding:0;
+			font-family:newfont;
+			outline:none;
+			scroll-behavior:smooth;
+			font-family:google;
+		}
+		@font-face{	
+			src:url("fonts/font.ttf");
+			font-family:google;
+		}				
+		body{
+			width:100%;
+			height:100%;
+			display:flex;
+			justify-content:center;
+			align-items:center;
+		}
+		#form{
+			border:1px solid #0004;
+			padding:50px 40px 50px 60px;
+			width:40%;
+			background:white;
+			border-radius:10px;
+			display:flex;
+			flex-direction:column;
+			align-items:flex-start;
+		}
+		#form h2{
+			margin-bottom:40px;
+		}
+		#form input{
+			width:300px;
+			margin-bottom:20px;
+			border:none;
+			border-bottom:1px solid #0005;
+			border-radius:5px;
+			padding:5px 3px;
+			font-size:15px;
+		}	
+		#form input:focus{
+			border-bottom:1px solid black;
+			transition:0.5s;
+		}
+		#form #buttons{
+			display:flex;
+			align-items:center;
+			justify-content:space-around;
+			width:300px;
+			margin-top:20px;
+		}		
+		#form #buttons button{
+			padding:5px 15px;
+			cursor:pointer;
+			font-size:15px;
+			background:#00fc;
+			border:none;
+			border-radius:5px;
+			color:white;
+			font-weight:700;
+		}
+		#form #buttons a{
+			color:white;
+			text-decoration:none;
+		}
+		#form p{
+			margin-bottom:0px;
+		}	
+		#form #buttons+a{
+			margin-top:20px;
+			color:black;
+			
+		}	
+	</style>
+</head>
+<body>
+		<div id="form">
+			<h2>Signup Form</h2>
+			<p>Username:</p>
+			<input placeholder="enter your email" type="email" class="signup"/>
+			<p>ID Number:</p>
+			<input type="text" class="signup"/>
+			<p>Password:</p>
+			<input type="password" class="signup"/>
+			<p>Retype Password:</p>
+			<input type="password" class="signup"/>
+			<div id="buttons">
+				<button><a href="home.html">close</a></button>
+				<button onclick="validation()">submit</button>
+			</div>
+			<a href="Mini_Project_bhaskar/UserDetails.html">Fill more details</a>
+		</div>
+		<script>
+			async function validation(){
+				var form=document.getElementsByClassName("signup");
+				var username=form[0].value;
+				var userId=form[1].value;
+				var password=form[2].value;
+				var retyped=form[3].value;
+				console.log(username+" "+userId+" "+password+" "+retyped);				
+				if(password==retyped){
+					var data={"user":username,"id":userId,"pass":password,"retype":retyped};
+					console.log(data);
+					var res=await fetch("http://localhost:8080/Authentication/signup",{"method":"post","headers":{"Content-Type":"application/json"},"body":JSON.stringify(data)});
+					var ret=await res.json();
+					if(ret.status) window.alert("User added successfully");
+					else window.alert("unsuccessful registration");
+				}
+				
+			}
+		</script>
+</body>
+
+

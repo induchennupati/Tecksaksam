@@ -1,0 +1,155 @@
+<!doctype html>
+<html>
+	<head>
+		<title>Placement Cell | Companies</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+		<link rel="stylesheet" href="global.css"/>		
+		<style>
+			body{
+				padding:30px 50px;
+			}
+			#part1{
+				margin-top:80px;		
+				}
+			#part1 button{
+				padding:2px 5px;
+				cursor:pointer;
+			}
+			#part2{
+				display:flex;
+				margin-top:20px;
+				flex-wrap:wrap;
+				border:1px solid #ccc;
+				border-radius:10px;
+				width:100%;	
+				padding:20px 20px;
+				box-shadow:1px 1px 2px #ccc;
+			}
+			#part2-company{
+				border:1px solid #ccc;
+				border-radius:5px;
+				box-shadow:1px 1px 2px #ccc;				
+				display:flex;
+				flex-direction:column;
+				justify-content:center;
+				align-items:center;
+				padding:5px 20px;
+				margin-right:50px;
+			}
+			#part2-company img{
+				width:100px;
+				height:100px;
+			}		
+			#part2-company a{
+				cursor:pointer;
+				font-size:18px;
+				text-decoration:none;
+				font-weight:500;
+				color:black;
+				margin-bottom:5px;
+			}
+			#part2-company a:nth-child(3){
+				font-size:15px;
+				text-decoration:underline;
+			}							
+		</style>
+	</head>
+	<body>
+		<div id="navbar">
+			<div id="left">
+				<a href="home.html">Home<img src="gear.png"/></a>
+				<a href="companies.html">Companies<img src="gear.png"/></a>
+				<a href="bhaskar/Instructions/Instructions.html">Instructions<img src="gear.png"/></a>
+				<a href="modules/contact.html">Contact<img src="gear.png"/></a>
+				<div id="title">Forms<img src="gear.png"/></a>
+					<div id="dropdown">
+						<a href="bhaskar/UserDetails.html">Student Details</a>
+						<a href="companyForm.html">Company Details</a>
+						<a href="companyUpdateForm.html">HiringUpdates</a>
+					</div>
+				</div>				
+			</div>
+			<div id="center">
+				<p>Rajiv Gandhi University of Knowledge Technologies</p>
+				<i>catering to the rural youth of Andhra Pradesh</i>
+			</div>
+			<div id="right">
+				<a href="signup.html">Signup</a>
+			</div>
+		</div>
+		<div id="part1">
+			<button onclick="render(0)">Active</button>
+			<button onclick="render(1)">Upcoming</button>
+			<button onclick="render(-1)">Completed</button>
+			<button onclick="render(2)">My Registrations</button>			
+		</div>
+		<div id="part2">		
+		</div>
+	</body>
+	<script>
+		window.onload=loadCompanies();
+		let active="",upcoming="",completed="",myCompanies="";
+		function render(status){
+			var html="";		
+			if(status==0) html=active;
+			else if(status==-1) html=completed;
+			else if(status==1) html=upcoming;
+			else if(status==2) html=myCompanies;			
+			document.getElementById("part2").innerHTML=html;				
+		}
+		
+		function fullDetails(id,name,status){
+			sessionStorage.setItem("companyId",JSON.stringify({"id":id,"name":name,"registerStatus":status}));
+			window.open("companyFinal.html","_self");
+		}
+		
+		async function loadCompanies(){
+			var studentId=JSON.parse(localStorage.getItem("userDetails"))["userId"];
+			var res=await fetch(`http://localhost:8080/Company/getAllCompanies?studentId=${studentId}`);
+			var data=await res.json();
+			console.log(data);
+			var typeActive="",typeCompleted="",typeUpcoming="";
+			//var data={"data":[{"logo":"company/yupptv.png","name":"yupptv"}]};
+			data["active"].map((ele)=>{
+				typeActive+=ele.id.toString();
+				active+=`<div id="part2-company">
+					<img src="../../${ele.logo}"/>
+					<a onclick="fullDetails(${ele.id},'${ele['name']}',1)">${ele['name']}</a>
+					<a onclick="fullDetails(${ele.id},'${ele['name']}',1)">view Details</a>					
+				</div>`;					
+			})
+			data["completed"].map((ele)=>{
+				typeCompleted+=ele.id.toString();			
+				completed+=`<div id="part2-company">
+					<img src="../../${ele.logo}"/>
+					<a onclick="fullDetails(${ele.id},'${ele['name']}',0)">${ele['name']}</a>
+					<a onclick="fullDetails(${ele.id},'${ele['name']}',0)">view Details</a>										
+				</div>`;					
+			})
+			data["upcoming"].map((ele)=>{
+				typeUpcoming+=ele.id.toString();			
+				upcoming+=`<div id="part2-company">
+					<img src="../../${ele.logo}"/>
+					<a onclick="fullDetails(${ele.id},'${ele['name']}',0)">${ele['name']}</a>
+					<a onclick="fullDetails(${ele.id},'${ele['name']}',0)">view Details</a>										
+				</div>`;					
+			})
+			myRegistered=[]
+			data["myCompanies"].map(company=>{
+				if(typeActive.includes(company.id)) company["status"]=1;
+				else company["status"]=0;
+			})
+			data["myCompanies"].map((ele)=>{
+				myCompanies+=`<div id="part2-company">
+					<img src="../../${ele.logo}"/>
+					<a onclick="fullDetails(${ele.id},'${ele['name']}',${ele.status})">${ele['name']}</a>
+					<a onclick="fullDetails(${ele.id},'${ele['name']}',${ele.status})">view Details</a>										
+				</div>`;					
+			})			
+			render(0);								
+
+		}
+	</script>
+</html>
+
+

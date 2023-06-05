@@ -1,0 +1,63 @@
+<!doctype html>
+<head>
+	<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+	<link rel="stylesheet" href="global.css"/>
+	<style>
+		body{
+			display:flex;
+			justify-content:center;
+		}
+		#part1{
+			border:1px solid red;
+			width:70%;
+		}
+		#part1 #heading #title{
+			font-size:25px;
+			font-weight:600;
+		}
+		#part1 #body{
+			margin-top:20px;
+		}
+		#part1 #body img{
+			margin-top:30px;
+			width:400px;
+			height:300px;
+		}
+	</style>
+</head>
+<body>
+	<div id="part1">
+		<div id="heading">
+			<p id="title">Company Name</p>
+		</div>
+		<div id="body">
+			<!--<p id="title">First Round Results</p>
+			<img src="back.jpg"/>-->
+		</div>
+	</div>
+	<script>
+		window.onload=loadData;
+		async function loadData(){
+			var companyDetails=JSON.parse(sessionStorage.getItem("companyId"));
+			var id=companyDetails["id"];
+			var name=companyDetails["name"];
+			document.querySelector("#part1 #heading #title").innerHTML=name;
+			var data=JSON.stringify({"id":id})					
+			var res=await fetch("http://localhost:8080/companyUpdate/getUpdate",{
+				"method":"post",
+				"headers":{"Content-Type":"application/json"},
+				"body":data
+			});
+			var html=""
+			var ret=await res.json();
+			ret["data"].map(obj=>{
+				html+=
+				`<p id="title">${obj.heading} Hiring Updates</p>
+				<img src="company/${obj.data}"/>`
+			})
+			document.getElementById("body").innerHTML=html;
+		}
+	</script>
+</body>
+
+

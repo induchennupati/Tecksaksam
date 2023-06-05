@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Mini Project</title>
+	<link rel="stylesheet" type="text/css" href="styles.css">
+</head>
+<body>
+	<div class="divtotal">	
+		<div id="imgdiv">
+			<img src="profile.png" id="photo">
+		</div>
+		<div>
+			<h1 id="header">User Details</h1>
+			<input type="file" id="input_image" accept="image/*">
+			<label for="input_image" id="input_label">Choose Profile</label>
+		</div>
+	</div>
+	<form action="http://localhost:8080/Profile/addProfile" method="post" enctype="multipart/form-data" class="form">
+		<div class="total">
+			<div class="lside">
+				<label id="Fname">First Name</label>
+				<input type="text" name="firstName" placeholder="Enter your First Name" class="Text" style="margin-left:18px" id="Fname" required><br/><br/>
+				<label for="ID">ID NUMBER</label>
+				<input type="text" name="idNumber" placeholder="Enter college  Id number" class="Text" id="ID"><br/><br/>
+				<label for="Mob1">Mobile1</label>
+				<input type="number" name="mobile" placeholder="Enter phone number" class="Text" style="margin-left: 35px" id="Mob1" required><br/><br/>
+				<label for="gmail1">Email</label>
+				<input type="gmail" id="email" placeholder="Enter valid Gmail" class="Text" style="margin-left: 50px" id="gmail1" required><br/><br/>
+			</div>
+			<div class="rside">
+				<label for="Lname">Last Name</label>
+				<input type="text" name="lastName" id="lastName" placeholder="Enter Last Name" class="Text" style="margin-left: 17px" id="Lname" required><br/><br/>
+				<label for="DOB">Date of birth</label>
+				<input type="Date" name="birthDate" class="Text" style="margin-left: 5px" id="DOB" required><br/><br/>
+				<!--<label for="Mob2">Mobile2</label>
+				<input type="number" placeholder="Enter another Phone Number" class="Text" style="margin-left: 32px" id="Mob2" required><br/><br/>
+				<label for="gmail2">Alt Email</label>
+				<input type="gmail" placeholder="Enter another Gmail" class="Text" style="margin-left: 24px" id="gmail2" required><br/><br/>-->
+			</div>
+		</div>
+		<div>
+			<div>
+				<label style="margin-left: 20px">ADDRESS</label><br/>
+				<textarea name="address" style="width:590px;height:40px;margin-left: 120px" placeholder="Enter your Address"></textarea>
+			</div><br/>
+			<div style="display: flex;">
+				<label for="check" style="margin-left:20px" for="checking">SSC CGPA</label><input type="text" class="checking" name="marks10" id="check">
+				<label style="margin-left:100px" for="12cgpa">12 CGPA</label><input name="marks12" type="text" class="checking" id="12cgpa">
+				<label style="margin-left:100px" for="btech">BTECh CGPA</label><input name="marksBtech" type="text" class="checking" id="btech">
+			</div><br/>
+			<!--<div>
+				<label for="schoolname">SCHOOL NAME</label>
+				<input type="text" class="school" id="schoolname" style="margin-left: 50px"><br/><br/>
+				<label for="clg">COLLEGE NAME</label>
+				<input type="text" class="school" id="clg" style="margin-left: 40px"><br/><br/>
+				<label for="university">UNIVERSITY NAME</label>
+				<input type="text" class="school" id="university" style="margin-left: 19px">
+			</div><br/>-->
+			<div>
+				<div>
+					<label style="margin-left: 87px" for="resume" id="resumelabel">RESUME</label>
+					<input type="file" name="resume" style="margin-left: 19px" accept="application/pdf" id="resume">
+				</div>
+			</div><br/>
+			<!--<div style="display: flex;">
+				<div>
+					<label for="Tech">TECHNICAL SKILLS</label>
+					<input type="text" style="margin-left: 17px" class="skill" id="Tech" placeholder="Enter Technical Skills">
+				</div>
+				<div>
+					<label for="soft" style="margin-left: 20px">SOFT SKILLS</label>
+					<input type="text" class="skill" id="soft" placeholder="Enter Soft Skills">
+				</div>
+			</div>-->
+			<br/>
+		</div>
+		<center><input type="submit" class="button"></center>
+		<br/>
+		<!--<button type="submit" class="but" >SUBMIT</button><br/><br/> -->
+	</form>
+</body>
+<script type="text/javascript" src="script.js"></script>
+</html>

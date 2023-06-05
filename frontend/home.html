@@ -1,0 +1,140 @@
+<!doctype html>
+<html>
+	<head>
+		<title>Placement Cell</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+		<link rel="stylesheet" href="./nvk.css"/>
+		<link rel="stylesheet" href="./global.css"/>
+	</head>
+	<body>
+		<div id="navbar">
+			<div id="left">
+				<a href="#">Home<img src="gear.png"/></a>
+				<a href="companies.html">Companies<img src="gear.png"/></a>
+				<a href="bhaskar/Instructions/Instructions.html">Instructions<img src="gear.png"/></a>
+				<a href="modules/contact.html">Contact<img src="gear.png"/></a>
+				<div id="title">Forms<img src="gear.png"/></a>
+					<div id="dropdown">
+						<a href="bhaskar/UserDetails.html">Student Details</a>
+						<a href="companyForm.html">Company Details</a>
+						<a href="companyUpdateForm.html">HiringUpdates</a>
+					</div>
+				</div>				
+			</div>
+			<div id="center">
+				<p>Rajiv Gandhi University of Knowledge Technologies</p>
+				<i>catering to the rural youth of Andhra Pradesh</i>
+			</div>
+			<div id="right">
+				<a href="signup.html">Signup</a>
+			</div>
+		</div>
+		<div id="part1">
+			<div id="p1-left">
+				Username:<br/>
+				<input type="text" id="username" required/><br/>
+				Password:<br/>
+				<input type="password" id="password" required/><br/>
+				<button onclick="signin()">Login</button>
+			</div>
+			<div id="p1-left2">
+				<p>Hello</p><br/><h2>Student</h2><br/>
+				<p>Welcome to<br/> placement cell</p>			
+			</div>
+			<div id="p1-right">
+				<img src="images/man.png"/>			
+				<img src="images/clg.png"/>
+			</div>
+		</div>
+		<div id="part2">
+			<div id="p2-center">
+				<img src="images/meta.png"/>
+				<img src="images/apple.png"/>
+				<img src="images/netflix.png"/>
+				<img src="images/google.png"/>
+				<img src="images/salesforce.png"/>
+			</div>
+		</div>
+		<div id="part3">
+				<img src="images/docker.png"/>
+				<img src="images/huawei.png"/>
+				<img src="images/ibm.png"/>
+				<img src="images/oracle.png"/>
+				<img src="images/intel.png"/>
+				<img src="images/samsung.png"/>
+				<img src="images/uber.png"/>
+				<img src="images/zoom.png"/>
+				<img src="images/aecom.png"/>
+				<img src="images/huawei.png"/>
+				<img src="images/ibm.png"/>
+				<img src="images/oracle.png"/>
+				<img src="images/intel.png"/>
+				<img src="images/samsung.png"/>				
+				<img src="images/microsoft.png"/><br/>
+				<p>Many more companies are visiting</p>								
+		</div>
+		<div id="part4">
+			<div id="p4-left">
+				<h2>Recent Updates</h2>
+				<p>22 members got selected in YuppTv company</p>
+				<p>Adjoint Technologies 27<sup>th</sup> October 2022</p>	
+				<p>10 members got selected in MapleLabs</p>
+				<p>Wipro is visiting our campus on 10<sup>th</sup> November 2022</p>																
+				<p>TCS is visiting our campus on 20<sup>th</sup> November 2022</p>																				
+			</div>
+			<div id="p4-right">
+				<h2>Batch wise Progress</h2>
+				<div id="progress">2023<div id="progress-bar"><div style="width:90%;" id="sub"></div></div></div>
+				<div id="progress">2022<div id="progress-bar"><div style="width:83%;" id="sub"></div></div></div>
+				<div id="progress">2021<div id="progress-bar"><div style="width:85%;" id="sub"></div></div></div>
+				<div id="progress">2020<div id="progress-bar"><div style="width:70%;" id="sub"></div></div></div>
+				<div id="progress">2019<div id="progress-bar"><div style="width:75%;" id="sub"></div></div></div>																
+			</div>
+		</div>
+	</body>
+	<script>
+		function Signedin(){
+				var ele=document.querySelector("#navbar #right a");
+				ele.innerHTML="Logout";
+				ele.href="#";	
+				ele.addEventListener("click",Signedout);	
+				document.querySelector("#part1 #p1-left2").style.display="block";
+				document.querySelector("#part1 #p1-left").style.display="none";						
+		}
+		function Signedout(event){
+				localStorage.setItem("userDetails",JSON.stringify({"login":false}));
+				if(event.target.innerHTML=="Logout"){
+					event.preventDefault();
+					var ele=document.querySelector("#navbar #right a");
+					ele.innerHTML="Signup";
+					ele.href="signup.html";}
+				document.querySelector("#part1 #p1-left2").style.display="none";
+				document.querySelector("#part1 #p1-left").style.display="block";
+		}
+		function checkAuthentication(){
+			if(JSON.parse(localStorage.getItem("userDetails"))["login"]){Signedin();}
+			else {Signedout();}
+		}
+		window.onload=checkAuthentication;
+		async function signin(){
+			var username=document.getElementById("username");
+			var password=document.getElementById("password");
+			var data={"user":username.value,"pass":password.value};
+			var res=await fetch("http://localhost:8080/Authentication/signin",{"method":"post","headers":{"Content-Type":"application/json"},"body":JSON.stringify(data)});
+			var ret=await res.json();
+			console.log(ret);
+			if(ret.status==true){
+			window.alert("login successful");
+			localStorage.setItem("userDetails",JSON.stringify({"login":true,"userId":ret.id,"mail":ret.username}));
+				Signedin();
+				document.querySelector("#part1 #p1-left2").style.display="block";
+				document.querySelector("#part1 #p1-left").style.display="none";				
+				username.value=password.value="";					
+				}
+			else{
+				window.alert("wrong username or password");
+				}
+		}
+	</script>
+</html>
+

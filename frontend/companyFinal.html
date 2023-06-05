@@ -1,0 +1,163 @@
+<!doctype html>
+<html>
+	<head>
+		<title>Placement Cell | Company</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+		<link rel="stylesheet" href="global.css"/>		
+		<style>
+			body{
+				padding-bottom:50px;
+			}
+			#part1{
+				margin:100px 30px 10px 30px;
+				padding:30px 0px 80px 30px;
+				border:1px solid #CCC;
+				box-shadow:2px 2px 3px #ccc;
+				border-radius:10px;
+			}
+			#part1 #row,#part1 #rowLogo{
+				width:90%;
+				display:flex;
+				justify-content:flex-start;
+				align-items:flex-start;
+				margin-bottom:5px;
+				border:1px solid transparent;
+			}
+			#part1 #row:hover #left{ 
+				color:white;
+				background:#f00;
+				transition:0.3s;
+				margin-right:10px;
+				font-size:17px;
+				border-radius:8px 0px 0px 2px;
+			}
+			#part1 #row:hover #right {
+				color:white;
+				font-size:17px;
+				background:#e374e3;
+				transition:0.3s;
+				border-radius:0px 2px 8px 0px;
+				}	
+				
+			#part1 #row #left,#rowLogo #left{
+				text-transform:capitalize;	
+				width:400px;
+				padding:5px 10px;
+				border:1px solid transparent;
+				transition:0.3s;
+				font-weight:600;
+			}
+			#part1 #row #right,#rowLogo #right{
+				width:80%;
+				padding:5px 10px;
+				border:1px solid transparent;
+				transition:0.3s;
+			}	
+			#part1 button{
+				margin-left:10px;
+				margin-top:30px;
+				margin-bottom:30px;
+				padding:5px 13px;
+				font-size:16px;
+				letter-spacing:1px;
+				color:white;
+				background:#00DC;
+				border:none;
+				box-shadow:none;
+				border-radius:5px;
+			}	
+			#part1 #update{
+				font-size:20px;
+				margin-left:10px;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="navbar">
+			<div id="left">
+				<a href="home.html">Home<img src="gear.png"/></a>
+				<a href="companies.html">Companies<img src="gear.png"/></a>
+				<a href="bhaskar/Instructions/Instructions.html">Instructions<img src="gear.png"/></a>
+				<a href="modules/contact.html">Contact<img src="gear.png"/></a>
+				<div id="title">Forms<img src="gear.png"/></a>
+					<div id="dropdown">
+						<a href="bhaskar/UserDetails.html">Student Details</a>
+						<a href="companyForm.html">Company Details</a>
+						<a href="companyUpdateForm.html">HiringUpdates</a>
+					</div>
+				</div>				
+			</div>
+			<div id="center">
+				<p>Rajiv Gandhi University of Knowledge Technologies</p>
+				<i>catering to the rural youth of Andhra Pradesh</i>
+			</div>
+			<div id="right">
+				<a href="signup.html">Signup</a>
+			</div>
+		</div>	
+		<div id="part1">
+		</div>
+	</body>
+	<script>
+		window.onload=loadCompanyById;
+		function getComponent(title,description){
+			if(title=="logo"){
+				return `<div id="rowLogo">
+					<p id="left">${title}</p>
+					<p id="right"><img style='width:100px;height:100px;' src="../../${description}"/></p>
+				</div>`								
+			}
+			if(title=="fulldetails"){
+				return `<div id="row">
+					<p id="left">${title}</p>
+					<p id="right"><a href='./${description}'>click here to view</a></p>
+				</div>`								
+			}			
+			var component=`<div id="row">
+					<p id="left">${title}</p>
+					<p id="right">${description}</p>
+				</div>`				
+			return component;
+		}
+		
+		async function registration(id){
+			var details=JSON.parse(localStorage.getItem("userDetails"));
+			var companyDetails=JSON.parse(sessionStorage.getItem("companyId"));
+			var companyId=companyDetails["id"];
+			var data=JSON.stringify({"email":details["mail"],"id":details["userId"],"companyId":companyId});
+			//alert("hello");
+			console.log(data);
+			var res=await fetch("http://localhost:8080/mail/main",{"method":"post","headers":{"Content-Type":"application/json"},"body":data});
+			res=await res.json();
+			console.log(res);
+			if(res["status"]==true) alert(res["msg"]);
+			else alert(res["msg"]);
+			//alert("hii");
+		}
+		
+		async function loadCompanyById(){
+			let details=JSON.parse(sessionStorage.getItem("companyId"));
+			let id=details["id"];
+			let registerStatus=details["registerStatus"];
+			let data={"id":id};
+			let html=""			
+			var res=await fetch("http://localhost:8080/Company/getCompanyById",{"method":"post","headers":{"Content-Type":"application/json"},"body":JSON.stringify(data)});
+			var ret=await res.json();
+			//console.log(ret);
+			document.title="Placement Cell | "+ret["json"][0]["name"];
+			Object.entries(ret["json"][0]).map(([key,value])=>{
+				if(key!="id")
+				html+=getComponent(key,value);
+			})		
+			html+=`<button onclick='registration(${id})'>Register</button><br/>
+				<a id='update' href="companyUpdate.html">hiring Updates</a>`
+			document.getElementById("part1").innerHTML=html;		
+			if(registerStatus==0){
+				let ele=document.querySelector("#part1 button");
+				ele.style.cursor="not-allowed";
+				ele.disabled=true;
+				ele.style.background="red";
+				}					
+		}
+	</script>
+</html>	
